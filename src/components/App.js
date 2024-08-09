@@ -7,6 +7,7 @@ function App() {
   const [currentQuestionId, setCurrentQuestion] = useState(1);
   const [score, setScore] = useState(0);
   const currentQuestion = questions.find((q) => q.id === currentQuestionId);
+  const [timeRemaining, setTimeRemaining] = useState(10);
 
   function handleQuestionAnswered(correct) {
     if (currentQuestionId < questions.length) {
@@ -18,6 +19,20 @@ function App() {
       setScore((score) => score + 1);
     }
   }
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setTimeRemaining(prevTime => prevTime - 1);
+    }, 1000);   
+
+
+    if (timeRemaining === 0) {
+      setTimeRemaining(10);
+      onAnswered(false);
+    }
+
+    return () => clearInterval(timerId);
+  }, [timeRemaining,onAnswered]);
+
 
   return (
     <main>
